@@ -19,7 +19,12 @@ using Stopwatch = benchmark::Stopwatch<std::chrono::nanoseconds, std::chrono::hi
 struct TestSharedToShare : benchmark::Benchmark<Stopwatch>
 {
   TestSharedToShare(IntSharedPtrVec const& pSamples) : samples(pSamples){}
-  
+
+  void prepareTest() override
+  {
+    output.reserve(0);
+  }
+
   void runTest() override 
   {
     for(auto const& sample : samples)
@@ -63,6 +68,11 @@ struct TestSharedToRaw : benchmark::Benchmark<Stopwatch>
 {
   TestSharedToRaw(IntSharedPtrVec const& pSamples) : samples(pSamples){}
   
+  void prepareTest() override
+  {
+    output.reserve(0);
+  }
+
   void runTest() override 
   {
     for(auto const& sample : samples)
@@ -170,7 +180,7 @@ IntSharedPtrVec prepareTestData(std::size_t size)
 
 int main()
 {
-  constexpr size_t sampleSize = 100000;
+  constexpr size_t sampleSize = 100'000;
   constexpr size_t testRepeats = 100;
   
   auto samples = prepareTestData(sampleSize);
