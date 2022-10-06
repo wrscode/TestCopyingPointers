@@ -25,7 +25,7 @@ std::string timeUnitToStr<std::chrono::milliseconds>();
 template<>
 std::string timeUnitToStr<std::chrono::seconds>();
 
-typedef std::pair<double, std::string> TimeUnit;
+typedef std::pair<long double, std::string> TimeUnit;
 
 template <typename TimeT = std::chrono::milliseconds, typename ClockT = std::chrono::steady_clock>
 struct Stopwatch
@@ -90,7 +90,7 @@ struct Benchmark
   }
 
 private:
-  double calculateTotalTime() const
+  long double calculateTotalTime() const
   {
     return std::accumulate(std::begin(measurs), std::end(measurs), 0);
   }
