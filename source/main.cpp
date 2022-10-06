@@ -16,9 +16,9 @@ using IntRawPtrVec = std::vector<int*>;
 
 using Stopwatch = benchmark::Stopwatch<std::chrono::nanoseconds, std::chrono::high_resolution_clock>;
 
-struct TestSharedToShare : benchmark::Benchmark<Stopwatch>
+struct CopySharedVecToShareVec : benchmark::Benchmark<Stopwatch>
 {
-  TestSharedToShare(IntSharedPtrVec const& pSamples) : samples(pSamples){}
+  CopySharedVecToShareVec(IntSharedPtrVec const& pSamples) : samples(pSamples){}
 
   void prepareTest() override
   {
@@ -40,9 +40,9 @@ struct TestSharedToShare : benchmark::Benchmark<Stopwatch>
   IntSharedPtrVec output;
 };
 
-struct TestSharedToShareReserve : benchmark::Benchmark<Stopwatch>
+struct CopySharedVecToShareVecReserve : benchmark::Benchmark<Stopwatch>
 {
-  TestSharedToShareReserve(IntSharedPtrVec const& pSamples) : samples(pSamples){}
+  CopySharedVecToShareVecReserve(IntSharedPtrVec const& pSamples) : samples(pSamples){}
   
   void prepareTest() override
   {
@@ -64,9 +64,9 @@ struct TestSharedToShareReserve : benchmark::Benchmark<Stopwatch>
   IntSharedPtrVec output;
 };
 
-struct TestSharedToRaw : benchmark::Benchmark<Stopwatch>
+struct CopySharedVecToRawVec : benchmark::Benchmark<Stopwatch>
 {
-  TestSharedToRaw(IntSharedPtrVec const& pSamples) : samples(pSamples){}
+  CopySharedVecToRawVec(IntSharedPtrVec const& pSamples) : samples(pSamples){}
   
   void prepareTest() override
   {
@@ -88,9 +88,9 @@ struct TestSharedToRaw : benchmark::Benchmark<Stopwatch>
   IntRawPtrVec output;
 };
 
-struct TestSharedToRawReserve : benchmark::Benchmark<Stopwatch>
+struct CopySharedVecToRawVecReserve : benchmark::Benchmark<Stopwatch>
 {
-  TestSharedToRawReserve(IntSharedPtrVec const& pSamples) : samples(pSamples){}
+  CopySharedVecToRawVecReserve(IntSharedPtrVec const& pSamples) : samples(pSamples){}
   
   void prepareTest() override
   {
@@ -114,9 +114,9 @@ struct TestSharedToRawReserve : benchmark::Benchmark<Stopwatch>
 
 
 template<std::size_t size>
-struct TestSharedToRawArray : benchmark::Benchmark<Stopwatch>
+struct CopySharedVecToRawVecArray : benchmark::Benchmark<Stopwatch>
 {
-  TestSharedToRawArray(IntSharedPtrVec const& pSamples) : samples(pSamples){}
+  CopySharedVecToRawVecArray(IntSharedPtrVec const& pSamples) : samples(pSamples){}
 
   void runTest() override 
   {
@@ -139,9 +139,9 @@ struct TestSharedToRawArray : benchmark::Benchmark<Stopwatch>
 };
 
 template<std::size_t size>
-struct TestSharedToSharedArray : benchmark::Benchmark<Stopwatch>
+struct CopySharedVecToShareVecdArray : benchmark::Benchmark<Stopwatch>
 {
-  TestSharedToSharedArray(IntSharedPtrVec const& pSamples) : samples(pSamples){}
+  CopySharedVecToShareVecdArray(IntSharedPtrVec const& pSamples) : samples(pSamples){}
 
   void runTest() override 
   {
@@ -185,12 +185,12 @@ int main()
   
   auto samples = prepareTestData(sampleSize);
 
-  TestSharedToShare testSharedToShare{samples};
-  TestSharedToShareReserve testSharedToShareReserve{samples};
-  TestSharedToRaw testSharedToRaw{samples};
-  TestSharedToRawReserve testSharedToRawReserve{samples};
-  TestSharedToRawArray<sampleSize> testSharedToRawArray{samples};
-  TestSharedToSharedArray<sampleSize> testSharedToSharedArray{samples};
+  CopySharedVecToShareVec testSharedToShare{samples};
+  CopySharedVecToShareVecReserve testSharedToShareReserve{samples};
+  CopySharedVecToRawVec testSharedToRaw{samples};
+  CopySharedVecToRawVecReserve testSharedToRawReserve{samples};
+  CopySharedVecToRawVecArray<sampleSize> testSharedToRawArray{samples};
+  CopySharedVecToShareVecdArray<sampleSize> testSharedToSharedArray{samples};
 
   testSharedToShare.run(testRepeats);
   testSharedToShareReserve.run(testRepeats);
@@ -199,10 +199,10 @@ int main()
   testSharedToRawArray.run(testRepeats);
   testSharedToSharedArray.run(testRepeats);
 
-  std::cout << "SharedToShare:        " << std::fixed << std::setprecision(2) << testSharedToShare.singleRunTime()/sampleSize  << std::endl;
-  std::cout << "SharedToShareReserve: " << std::fixed << std::setprecision(2) << testSharedToShareReserve.singleRunTime()/sampleSize  << std::endl;
-  std::cout << "SharedToRaw:          " << std::fixed << std::setprecision(2) << testSharedToRaw.singleRunTime()/sampleSize  << std::endl;
-  std::cout << "SharedToRawReserve:   " << std::fixed << std::setprecision(2) << testSharedToRawReserve.singleRunTime()/sampleSize  << std::endl;
-  std::cout << "SharedToRawArray:     " << std::fixed << std::setprecision(2) << testSharedToRawArray.singleRunTime()/sampleSize  << std::endl;
-  std::cout << "SharedToSharedArray:  " << std::fixed << std::setprecision(2) << testSharedToSharedArray.singleRunTime()/sampleSize  << std::endl;
+  std::cout << "CopySharedVecToShareVec:        " << std::fixed << std::setprecision(2) << testSharedToShare.singleRunTime()/sampleSize  << std::endl;
+  std::cout << "CopySharedVecToShareVecReserve: " << std::fixed << std::setprecision(2) << testSharedToShareReserve.singleRunTime()/sampleSize  << std::endl;
+  std::cout << "CopySharedVecToRawVec:          " << std::fixed << std::setprecision(2) << testSharedToRaw.singleRunTime()/sampleSize  << std::endl;
+  std::cout << "CopySharedVecToRawVecReserve:   " << std::fixed << std::setprecision(2) << testSharedToRawReserve.singleRunTime()/sampleSize  << std::endl;
+  std::cout << "CopySharedVecToRawVecArray:     " << std::fixed << std::setprecision(2) << testSharedToRawArray.singleRunTime()/sampleSize  << std::endl;
+  std::cout << "CopySharedVecToShareVecdArray:  " << std::fixed << std::setprecision(2) << testSharedToSharedArray.singleRunTime()/sampleSize  << std::endl;
 }
